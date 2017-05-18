@@ -1,0 +1,403 @@
+
+<html>
+<head>
+  <title>Closures in Swift</title>
+  <style>
+    body {
+      background-color: #222222;
+      color: #ddd;
+      font-family: 'Yanone Kaffeesatz', sans-serif;
+      font-size: 30px;
+      padding: 40px;
+      padding-bottom: 0;
+    }
+
+    strong {
+      color: #cb2027;
+    }
+
+    h1 {
+      font-size: 60px;
+      margin-bottom: 1.5em;
+      text-align: center;
+    }
+
+    h2 {
+      font-weight: normal;
+    }
+
+    .hero {
+      font-size: 40px;
+      margin-bottom: 1.5em;
+      text-align: center;
+      /*color: #cb2027;*/
+    }
+
+    .intro {
+      text-align: center;
+    }
+
+    .func {
+      color: #9ae2e4;
+    }
+
+    .name {
+      color: gold;
+    }
+
+    .classes {
+      color: #9c9ae4;
+    }
+
+    .disclaimer {
+      line-height: 2em;
+    }
+
+    .ads {
+      align-content: center;
+    }
+
+    code {
+      display: block;
+      font-family: 'Inconsolata', Monaco, Menlo;
+      font-size: 25px;
+      margin-bottom: 3em;
+      margin-left: 40px;
+      margin-top: 1.5em;
+    }
+
+    footer {
+      font-size: 12px;
+      margin-top: 200px;
+      opacity: 0.4;
+      text-align: right;
+    }
+
+    a {
+      color: #0088D9;
+      text-decoration: none;
+    }
+
+  </style>
+
+  <style media='print'>
+    body {
+      background-color: #FFFFFF;
+      font-size: 16px;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 1em;
+    }
+
+    code {
+      font-size: 16px;
+      margin-bottom: 2em;
+      margin-left: 20px;
+    }
+
+    footer {
+      font-size: 10px;
+      margin-top: 40px;
+    }
+  </style>
+
+  <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  <a href="https://github.com/chasseurmic"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
+  <h1>Swift closures and functions</h1>
+
+  <div class="intro">
+    <div>
+      <code class="hero">()<span class="func">-></span>()</code>
+    </div>
+
+    <div>
+      Closures in Swift are similar to blocks in C and Objective-C.
+    </div>
+
+    <div>
+      Closures are first-class objects, so that they can be nested and passed around (as do blocks in Objective-C).
+    </div>
+    <div>
+      In Swift, functions are just a special case of closures.
+    </div>
+
+    <div>
+
+    </div>
+  </div>
+
+  <!--  Defining a function -->
+  <div>
+    <h2><strong>Defining</strong> a function:</h2>
+    <div>
+      You define a function with the <span class="func">func</span> keyword. Functions can take and return none, one or multiple parameters (<span class="classes">tuples</span>).
+    </div>
+    <div>
+      Return values follow the <span class="func">-></span> sign.
+    </div>
+    <code>
+      <div>
+        <span class='func'>func</span> jediGreet(name: <span class='classes'>String</span>, ability: <span class='classes'>String</span>) <span class="func">-></span> (farewell: <span class="classes">String</span>, mayTheForceBeWithYou: <span class="classes">String</span>) {
+      </div>
+      <div>
+        <span class="func">&nbsp return</span> (<span class="name">"Good bye, \(name)."</span>, <span class="name">" May the \(ability) be with you."</span>)
+      </div>
+      <div>
+      }
+      </div>
+    </code>
+  </div>
+
+  <!--  Calling a function -->
+  <div>
+    <h2><strong>Calling</strong> a function:</h2>
+    <code>
+      <div>
+        let retValue = jediGreet(<span class="name">"old friend"</span>, <span class="name">"Force"</span>)
+        <div>
+          println(retValue)
+        </div>
+        <div>
+          println(retValue.farewell)
+        </div>
+        <div>
+          println(retValue.mayTheForceBeWithYou)
+        </div>
+      </div>
+    </code>
+  </div>
+
+  <!--  Function Types -->
+  <div>
+    <h2>Function<strong> types</strong></h2>
+    <div>
+      Every function has its own function type, made up of the parameter types and the return type of the function itself.
+    </div>
+    <div>
+      For example the following function:
+    </div>
+    <code><span class="func">func</span> sum(x: <span class="classes">Int</span>, y: <span class="classes">Int</span>) <span class="func">-></span> (result: <span class="classes">Int</span>) { return x + y }</code>
+    <div>
+      has a <span class="func">function type</span> of:
+    </div>
+    <code>
+      <span class="">(<span class="classes">Int</span>, <span class="classes">Int</span>) <span class="func">-></span> (<span class="classes">Int</span>)</span>
+    </code>
+    </div>
+    <div>
+      Function types can thus be used as parameters types or as return types for nesting functions.
+    </div>
+  </div>
+
+  <!--  Passing and returning functions -->
+  <div>
+    <h2><strong>Passing and returning</strong> functions</h2>
+    The following function is returning another function as its result which can be later assigned to a variable and called.
+      <code>
+        <div>
+          <span class="func">func</span> jediTrainer () <span class="func">-></span> ((<span class="classes">String</span>, <span class="classes">Int</span>) -> <span class="classes">String</span>) {
+        </div>
+        <div>
+          &nbsp <span class="func">func</span> train(name: <span class="classes">String</span>, times: <span class="classes">Int</span>) -> (<span class="classes">String</span>) {
+        </div>
+        <div>
+          &nbsp &nbsp return <span class="name">"\(name) has been trained in the Force \(times) times"</span>
+        </div>
+        <div>
+          &nbsp }
+        </div>
+        <div>
+          &nbsp return train
+        </div>
+        <div>
+          }
+        </div>
+        <div>
+          let train = jediTrainer()
+        </div>
+        <div>
+          train(<span class="name">"Obi Wan"</span>, 3)
+        </div>
+    </code>
+  </div>
+
+  <!--  Variadic functions -->
+  <div>
+    <h2><strong>Variadic</strong> functions</h2>
+    <div>
+      Variadic functions are functions that have a variable number of arguments (indicated by <span class="classes">...</span> after the argument's type) that can be accessed into their body as an array.
+    </div>
+    <code>
+      <div>
+        <span class="func">func</span> jediBladeColor (colors: <span class="classes">String...</span>) <span class="func">-></span> () {
+      </div>
+      <div>
+        &nbsp for color in colors {
+      </div>
+      <div>
+        &nbsp &nbsp println(<span class="name">"\(color)"</span>)
+      </div>
+      <div>
+        &nbsp }
+      </div>
+      <div>
+        }
+      </div>
+      <div>
+        jediBladeColor(<span class="name">"red"</span>,<span class="name">"green"</span>)
+      </div>
+    </code>
+  </div>
+
+  <hr/>
+  <!-- ADS -->
+  <div align="center">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Swift Block Syntax -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7991271006992878"
+         data-ad-slot="7063663083"
+         data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <!--  Closures -->
+  <div class="intro">
+    <div>
+      <code class="hero">{()<span class="func">-></span>() in}</code>
+    </div>
+  </div>
+
+  <!--  Defining a closure -->
+  <div>
+    <h2>Defining a <strong>closure</strong>:</h2>
+    <div>
+      Closures are typically enclosed in curly braces <span class="func">{ }</span> and are defined by a function type <span class="func">() -> ()</span>, where <span class="func">-></span> separates the arguments and the return type, followed by the <span class="func">in</span> keyword which separates the closure header from its body.
+    </div>
+    <code>
+      <div>
+        { (params) -> <span class="classes">returnType</span> <span class="func">in</span>
+      </div>
+      <div>
+        &nbsp statements
+      </div>
+      <div>
+      }
+      </div>
+    </code>
+  </div>
+  An example could be the <span class="func">map</span> function applied to an Array:
+  <code>
+    <div>
+      let padawans = [<span class="name">"Knox"</span>, <span class="name">"Avitla"</span>, <span class="name">"Mennaus"</span>]
+    </div>
+    <div>
+      padawans.map({
+    </div>
+    <div>
+      &nbsp (padawan: <span class="classes">String</span>) -> <span class="classes">String</span> <span class="func">in</span>
+    </div>
+    <div>
+      &nbsp <span class="name">"\(padawan) has been trained!"</span>
+    </div>
+    <div>
+    })
+    </div>
+  </code>
+
+  <div>
+    <h2><strong>Closures</strong> with known types:</h2>
+    <div>
+      When the type of the closure's arguments are known, you can do as follows:
+    </div>
+    <code>
+      <div>
+        <span class="func">func</span> applyMutliplication(value: <span class="classes">Int</span>, multFunction: <span class="classes">Int</span> -> <span class="classes">Int</span>) -> <span class="classes">Int</span> {
+      </div>
+      <div>
+        &nbsp return multFunction(value)
+      </div>
+      <div>
+        }
+      </div>
+      <br/>
+      <div>
+        applyMutliplication(2, {value <span class="func">in</span>
+      </div>
+      <div>
+        &nbsp value * 3
+      </div>
+      <div>
+        })
+      </div>
+    </code>
+  </div>
+
+  <div>
+    <h2><strong>Closures</strong> shorthand argument names:</h2>
+    <div>
+      Closure arguments can be references by position ($0, $1, ...) rather than by name
+    </div>
+    <code>
+      <div>
+        applyMutliplication(2, {<span class="func">$0</span> * 3})
+      </div>
+    </code>
+    <div>
+      Furthermore, when a closure is the last argument of a function, parenthesis can be omitted as such:
+    </div>
+    <code>
+      <div>
+        applyMutliplication(2) {<span class="func">$0</span> * 3}
+      </div>
+    </code>
+  </div>
+
+  <hr/>
+
+  <div class='disclaimer'>
+    This site is not in any way intended to be an exhaustive list of all the features provided by functions and closures in Swift.
+    <br/>
+    For further information please check Apple's official documentation.
+  </div>
+
+  <hr/>
+  <!-- Recommended Readings - Amazon ADS -->
+  <h2 align="center"><strong>Recommended readings:</strong></h2>
+  <div class="ads" align="center">
+    <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=chasseurmic-20&marketplace=amazon&region=US&placement=0134398017&asins=0134398017&linkId=43c729d265225964a12219c92c3b727b&show_border=false&link_opens_in_new_window=false&price_color=333333&title_color=0066C0&bg_color=FFFFFF">
+    </iframe>
+    <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=chasseurmic-20&marketplace=amazon&region=US&placement=1491970073&asins=1491970073&linkId=76542c3787c24014c19bdf37709b85f6&show_border=false&link_opens_in_new_window=false&price_color=333333&title_color=0066c0&bg_color=ffffff">
+    </iframe>
+    <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=chasseurmic-20&marketplace=amazon&region=US&placement=1491940743&asins=1491940743&linkId=0be3799b12f197cda76087c8f11b0ba3&show_border=false&link_opens_in_new_window=false&price_color=333333&title_color=0066c0&bg_color=ffffff">
+    </iframe>
+    <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=chasseurmic-20&marketplace=amazon&region=US&placement=0134390733&asins=0134390733&linkId=c2f8e131a89f3af7bf5e353367023327&show_border=false&link_opens_in_new_window=false&price_color=333333&title_color=0066c0&bg_color=ffffff">
+    </iframe>
+    <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=chasseurmic-20&marketplace=amazon&region=US&placement=1785883887&asins=1785883887&linkId=37a762e9b79c75b71378c4eac5065fff&show_border=false&link_opens_in_new_window=false&price_color=333333&title_color=0066c0&bg_color=ffffff">
+    </iframe>
+  </div>
+
+  <footer>by <a href="http://github.com/chasseurmic">Michelangelo Chasseur</a>.</footer>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-5972693-13', 'fuckingswiftblocksyntax.com');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>
