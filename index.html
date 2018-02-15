@@ -322,7 +322,7 @@
     </div>
     <code>
       <div>
-        <span class="func">func</span> applyMutliplication(value: <span class="classes">Int</span>, multFunction: <span class="classes">Int</span> -> <span class="classes">Int</span>) -> <span class="classes">Int</span> {
+        <span class="func">func</span> applyMultiplication(value: <span class="classes">Int</span>, multFunction: <span class="classes">(Int)</span> -> <span class="classes">Int</span>) -> <span class="classes">Int</span> {
       </div>
       <div>
         &nbsp return multFunction(value)
@@ -332,7 +332,7 @@
       </div>
       <br/>
       <div>
-        applyMutliplication(2, {value <span class="func">in</span>
+        applyMultiplication(value: 2, multFunction: {value <span class="func">in</span>
       </div>
       <div>
         &nbsp value * 3
@@ -350,7 +350,7 @@
     </div>
     <code>
       <div>
-        applyMutliplication(2, {<span class="func">$0</span> * 3})
+        applyMultiplication(value: 2, multFunction: {<span class="func">$0</span> * 3})
       </div>
     </code>
     <div>
@@ -358,7 +358,7 @@
     </div>
     <code>
       <div>
-        applyMutliplication(2) {<span class="func">$0</span> * 3}
+        applyMultiplication(2) {<span class="func">$0</span> * 3}
       </div>
     </code>
   </div>
